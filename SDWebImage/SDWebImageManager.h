@@ -73,6 +73,8 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
     /**
      * By default, placeholder images are loaded while the image is loading. This flag will delay the loading
      * of the placeholder image until after the image has finished loading.
+     
+       默认情况下，当正在加载网络端的image 时，placeholder已经加载到了UIImageView，这个枚举项就是为了避免这种默认情况，将延迟placeholder的加载直到网络端的image加载完成。
      */
     SDWebImageDelayPlaceholder = 1 << 9,
 
@@ -85,7 +87,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
     
     /**
      * By default, image is added to the imageView after download. But in some cases, we want to
-     * have the hand before setting the image (apply a filter or add it with cross-fade animation for instance)
+     * have the hand before setting the image (apply a filter or add it with cross-fade animation[淡出动画] for instance)
      * Use this flag if you want to manually set the image in the completion when success
      */
     SDWebImageAvoidAutoSetImage = 1 << 11

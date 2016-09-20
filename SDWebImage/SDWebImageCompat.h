@@ -64,6 +64,9 @@ extern NSString *const SDWebImageErrorDomain;
         dispatch_sync(dispatch_get_main_queue(), block);\
     }
 
+/**
+ *  如果当前是主进程，就直接执行block，否则把block放到主进程运行。
+ */
 #define dispatch_main_async_safe(block)\
     if ([NSThread isMainThread]) {\
         block();\
