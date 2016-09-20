@@ -27,6 +27,7 @@ static char loadOperationKey;
 }
 
 - (void)sd_setImageLoadOperation:(id)operation forKey:(NSString *)key {
+    
     /**
      *  一进函数，先取消索引为key的operation的操作，如果之前正在进行索引为key的操作，那不就取消了嘛？是这样的，如果该operation存在，就取消掉了，还要删除这个key对应的object（operation）。然后重新设置key对应的operation
      */
@@ -50,6 +51,7 @@ static char loadOperationKey;
     if (operations) {
         
         /** 索引到的operations假如是一组operation的集合，那么就需要来个遍历，一个个取消掉operations序列中的operation了 */
+        /** operation表示一个数组(NSArray)时，主要是考虑到gif这种动态图。因为gif是多张图片集合，所以需要NSArray类型来表示 */
         if ([operations isKindOfClass:[NSArray class]]) {
             for (id <SDWebImageOperation> operation in operations) {
                 if (operation) {

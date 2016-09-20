@@ -12,14 +12,17 @@
 typedef NS_ENUM(NSInteger, SDImageCacheType) {
     /**
      * The image wasn't available the SDWebImage caches, but was downloaded from the web.
+       该图片无法从SDWebImage的缓存中获取，必须从web端下载。
      */
     SDImageCacheTypeNone,
     /**
      * The image was obtained from the disk cache.
+       图片从硬盘缓存(disk cache)中获取
      */
     SDImageCacheTypeDisk,
     /**
      * The image was obtained from the memory cache.
+       图片从内存(memory)中获取
      */
     SDImageCacheTypeMemory
 };

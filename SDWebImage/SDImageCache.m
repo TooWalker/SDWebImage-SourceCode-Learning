@@ -379,22 +379,38 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(SDWebImageQueryCompletedBlock)doneBlock {
+    
+    /**
+     *  如果doneBlock不存在。那么就return nil。这个处理和downloadImageWithURL的completedBlock很类似
+     */
     if (!doneBlock) {
         return nil;
     }
-
+    
+    /**
+     *  如果key为nil，说明cache中没有该image。所以doneBlock中传入SDImageCacheTypeNone，表示cache中没有图片，要从网络重新获取
+     */
     if (!key) {
         doneBlock(nil, SDImageCacheTypeNone);
         return nil;
     }
 
     // First check the in-memory cache...
+    /**
+     *  如果key不为nil，首先在内存cache中查找
+     */
     UIImage *image = [self imageFromMemoryCacheForKey:key];
+    /**
+     *  找到了，就传入SDImageCacheTypeMemory，说是在内存cache中获取的
+     */
     if (image) {
         doneBlock(image, SDImageCacheTypeMemory);
         return nil;
     }
 
+    /**
+     *  否则，说明图片就在磁盘cache中
+     */
     NSOperation *operation = [NSOperation new];
     dispatch_async(self.ioQueue, ^{
         if (operation.isCancelled) {
@@ -403,11 +419,17 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 
         @autoreleasepool {
             UIImage *diskImage = [self diskImageForKey:key];
+            /**
+             *  如果磁盘中得到了该image，并且还需要缓存到内存中，为了同步最新数据
+             */
             if (diskImage && self.shouldCacheImagesInMemory) {
                 NSUInteger cost = SDCacheCostForImage(diskImage);
                 [self.memCache setObject:diskImage forKey:key cost:cost];
             }
-
+            
+            /**
+             *  传入SDImageCacheTypeDisk，说明是从磁盘中获取的
+             */
             dispatch_async(dispatch_get_main_queue(), ^{
                 doneBlock(diskImage, SDImageCacheTypeDisk);
             });

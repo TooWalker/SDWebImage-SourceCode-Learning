@@ -132,6 +132,8 @@ static NSString *const kCompletedCallbackKey = @"completed";
         else {
             request.allHTTPHeaderFields = wself.HTTPHeaders;
         }
+        
+        /** http://images2015.cnblogs.com/blog/715314/201512/715314-20151226140747781-719814073.png */
         operation = [[wself.operationClass alloc] initWithRequest:request
                                                           options:options
                                                          progress:^(NSInteger receivedSize, NSInteger expectedSize) {

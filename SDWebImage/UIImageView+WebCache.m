@@ -59,6 +59,20 @@ static char TAG_ACTIVITY_SHOW;
     /**
      *  先取消当前的 operation，和 sd_cancelImageLoadOperationWithKey: 中一开始取消索引为 key 的操作思路一致，只是此处的 key 指定为 “UIImageViewImageLoad”
      */
+    /**
+     *  每一个UIImageView我们默认只能加载一张图片(或者一张gif，这就要提到operations是NSArray的情况了，这里先不管)
+     比如下面这段代码：
+     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 50, 50)];
+     [imageView sd_setImageWithURL:[NSURL URLWithString:@"http://www.example.com/1.png"] placeholderImage:nil];
+     [imageView sd_setImageWithURL:[NSURL URLWithString:@"http://www.example.com/2.png"] placeholderImage:nil];
+     
+     上面的代码是在imageView上请求了两张图片1.png和2.png，但是我们只会显示后面那张，即2.png，那我们需要取消第一次请求的1.png操作，所以调用sd_cancelImageLoadOperationWithKey。原因如下：
+     1.可能1.png在2.png后面获取到，那会覆盖掉2.png，这是我们不想要的。
+     2.优化网络请求操作，网络请求很耗时的，尽量避免冗余的操作。
+     
+     整个过程就是，当我们请求1.png的时候，UIImageView会维护一个operationDictionary，该函数是用来保存当前UIImageView上的图片请求的。所以第一次请求1.png时，此operationDictionary代表的Dicitionary变量是空的，所以后面会调用sd_setImageLoadOperation来维护这个Dictionary，即给Dictionary添加一个key为"UIImageViewImageLoad"的id<SDWebImageOperation>变量，此变量代表一个图片网络请求。后面加载2.png时，因为key相同，所以会取消上一次1.png的请求。
+     总之一个UIImageView当前只允许一个图片网络请求！当然其他UIButton这些UIView都是相同道理。gif（多张图片组合，即NSArray）网络图片请求也是这个道理。
+     */
     [self sd_cancelCurrentImageLoad];
     
     /**

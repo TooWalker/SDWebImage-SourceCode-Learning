@@ -15,6 +15,9 @@ extern NSString *const SDWebImageDownloadReceiveResponseNotification;
 extern NSString *const SDWebImageDownloadStopNotification;
 extern NSString *const SDWebImageDownloadFinishNotification;
 
+/**
+ *  这个类就是NSOperation的子类，并且遵循SDWebImageOperation协议。这下SDWebImageDownloaderOperation将NSOperation和SDWebImageOperation联系在了一起
+ */
 @interface SDWebImageDownloaderOperation : NSOperation <SDWebImageOperation>
 
 /**

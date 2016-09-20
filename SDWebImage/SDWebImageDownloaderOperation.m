@@ -49,6 +49,7 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
              progress:(SDWebImageDownloaderProgressBlock)progressBlock
             completed:(SDWebImageDownloaderCompletedBlock)completedBlock
             cancelled:(SDWebImageNoParamsBlock)cancelBlock {
+    
     if ((self = [super init])) {
         _request = request;
         _shouldDecompressImages = YES;

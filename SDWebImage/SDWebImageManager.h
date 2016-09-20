@@ -32,6 +32,8 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
     /**
      * This flag enables progressive download, the image is displayed progressively during download as a browser would do.
      * By default, the image is only displayed once completely downloaded.
+     
+       如果在加载图片中设定了该选项，那么图片会随着下载的进度一点点地显示出来。缺省情况下，图片是下载完成后一次显示出来的。
      */
     SDWebImageProgressiveDownload = 1 << 3,
 
@@ -113,6 +115,14 @@ typedef NSString *(^SDWebImageCacheKeyFilterBlock)(NSURL *url);
  * @param imageURL     The url of the image to be downloaded
  *
  * @return Return NO to prevent the downloading of the image on cache misses. If not implemented, YES is implied.
+ */
+/**
+ * 当image无法在缓存中找到,调用该函数控制该image的下载
+ *
+ * @param imageManager 当前的`SDWebImageManager`
+ * @param imageURL     需要下载的image的URL
+ *
+ * @return 返回NO表示当图片缓存未命中，反而阻止图片下载。如果该函数没实现，相当于返回YES。
  */
 - (BOOL)imageManager:(SDWebImageManager *)imageManager shouldDownloadImageForURL:(NSURL *)imageURL;
 
@@ -205,6 +215,8 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  *   block is called a last time with the full image and the last parameter set to YES.
  *
  * @return Returns an NSObject conforming to SDWebImageOperation. Should be an instance of SDWebImageDownloaderOperation
+ 
+    此处的注释，请看 .m 文件中的翻译
  */
 - (id <SDWebImageOperation>)downloadImageWithURL:(NSURL *)url
                                          options:(SDWebImageOptions)options
