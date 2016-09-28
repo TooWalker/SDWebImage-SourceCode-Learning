@@ -53,7 +53,7 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
 /**
  * use memory cache [defaults to YES]
  */
-@property (assign, nonatomic) BOOL shouldCacheImagesInMemory;
+@property (assign, nonatomic) BOOL shouldCacheImagesInMemory;       /**< 应该缓存图片到内存中 */
 
 /**
  * The maximum "total cost" of the in-memory image cache. The cost function is the number of pixels held in memory.

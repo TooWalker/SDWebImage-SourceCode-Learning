@@ -114,17 +114,16 @@
  * 如果图片不在缓存中，根据指定的URL下载图片，否则使用缓存中的图片。
  *
  * @param url            图片的URL
- * @param options        该请求所要遵循的选项。（前面已经介绍了两个）
- * @param progressBlock  当图片正在下载时调用该block。
- * @param completedBlock 当操作完成后调用该block。
+ * @param options        该请求所要遵循的选项
+ * @param progressBlock  当图片正在下载时调用该block
+ * @param completedBlock 当操作完成后调用该bloc
  *   ---------------------------------------
- *   该参数是必须的。（指的是completedBlock）
+ *   completedBlock参数是必须的
  *
  *   该block没有返回值并且用请求的UIImage作为第一个参数。
  *   如果请求出错，那么image参数为nil，而第二参数将包含一个NSError对象。
  *
- *   第三个参数是'SDImageCacheType'枚举，表明该图片重新获取方式是从本地缓存（硬盘）或者
- *   从内存缓存，还是从网络端重新获取image一遍。
+ *   第三个参数是'SDImageCacheType'枚举，表明该图片重新获取方式是从本地缓存（硬盘）或者从内存缓存，还是从网络端重新获取image一遍。
  *   ---------------------------------------
  *   当这个方法的 options 参数设为 SDWebImageProgressiveDownload 并且此时图片正在下载，finished 将设为 NO
  *   因此这个 block 会不停地调用直到图片下载完成，此时才会设置finished为YES.
@@ -135,6 +134,7 @@
                                          options:(SDWebImageOptions)options
                                         progress:(SDWebImageDownloaderProgressBlock)progressBlock
                                        completed:(SDWebImageCompletionWithFinishedBlock)completedBlock {
+    
     // Invoking this method without a completedBlock is pointless
     /**
      *  如果调用此方法，而没有传completedBlock，那将是无意义的.

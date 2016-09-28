@@ -104,16 +104,18 @@ static char TAG_ACTIVITY_SHOW;
 
         __weak __typeof(self)wself = self;
         
-        /** 封装成 operation 作为参数放到 sd_setImageLoadOperation:forKey: 中 */
+        /** 封装 operation，之后把 operation 作为参数放到 sd_setImageLoadOperation:forKey: 中 */
         id <SDWebImageOperation> operation = [SDWebImageManager.sharedManager downloadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             
             [wself removeActivityIndicator];
+            
             if (!wself) return;
+            
             dispatch_main_sync_safe(^{
                 
                 if (!wself) return;
                 
-                if (image && (options & SDWebImageAvoidAutoSetImage) && completedBlock) {
+                if (image && (options & SDWebImageAvoidAutoSetImage) && completedBlock) {   /**< image 从网络获取成功，并且设置了SDWebImageAvoidAutoSetImage（避免直接设置图片） 这个 flag，那就先把图片用 completedBlock 处理一下，然后再显示出来 */
                     
                     completedBlock(image, error, cacheType, url);
                     return;
@@ -143,7 +145,7 @@ static char TAG_ACTIVITY_SHOW;
                 }
                 
                 /**
-                 *  其实除了有 SDWebImageAvoidAutoSetImage 枚举选项时需要手动处理，其实只要你自定义了compeletedBlock，就会调用你自定义处理的函数。你说我怎么知道的？你看下面的代码，如果你自定义了下载完成后的处理方式，并且也确实下载完成了（finished为YES），就执行自定义方式
+                 *  其实除了有 SDWebImageAvoidAutoSetImage 枚举选项时需要手动处理，只要你自定义了compeletedBlock，就会调用你自定义处理的函数。看下面的代码，如果你自定义了下载完成后的处理方式，并且也确实下载完成了（finished为YES），就执行自定义方式
                  */
                 if (completedBlock && finished) {
                     completedBlock(image, error, cacheType, url);
